@@ -1,4 +1,3 @@
-# minin-bank-vue
 
 ## Project setup
 ```
