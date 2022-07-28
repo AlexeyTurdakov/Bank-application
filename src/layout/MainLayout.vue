@@ -1,7 +1,7 @@
 <template>
   <the-navbar></the-navbar>
   <div class="container with-nav">
-    <div class="card">main</div>
+    <router-view />
   </div>
 </template>
 
