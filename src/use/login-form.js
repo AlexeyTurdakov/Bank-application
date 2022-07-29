@@ -1,8 +1,10 @@
 import { computed, watch } from "vue";
 import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
+import { useStore } from "vuex";
 
 export default function useLoginForm() {
+  const store = useStore();
   const { handleSubmit, isSubmitting, submitCount } = useForm();
 
   const {
@@ -19,8 +21,8 @@ export default function useLoginForm() {
 
   const isTooManyAttempts = computed(() => submitCount.value >= 3);
 
-  const onSubmit = handleSubmit((values) => {
-    console.log(values);
+  const onSubmit = handleSubmit(async (values) => {
+    await store.dispatch("auth/login", values);
   });
 
   watch(isTooManyAttempts, (value) => {
