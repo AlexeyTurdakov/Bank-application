@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @submit.prevent="onSubmit">
+  <form class="card" @submit.prevent="onSubmit">
     <h1>Войти в систему</h1>
 
     <div :class="['form-control', { invalid: eError }]">
@@ -13,40 +13,25 @@
       <input type="password" id="password" v-model="password" @blur="pBlur" />
       <small v-if="pError">{{ pError }}</small>
     </div>
-    <button class="btn primary" type="submit">Войти</button>
-  </div>
+    <button
+      class="btn primary"
+      type="submit"
+      :disabled="isSubmitting || isTooManyAttempts"
+    >
+      Войти
+    </button>
+    <div class="text-danger" v-if="isTooManyAttempts">
+      Вы слишком часто пытаетесь войти в систему! Попробуйте позже
+    </div>
+  </form>
 </template>
 
 <script>
-import * as yup from "yup";
-import { useField, useForm } from "vee-validate";
+import useLoginForm from "../use/login-form.js";
 
 export default {
   setup() {
-    const { handleSubmit, isSubmitting } = useForm();
-
-    const {
-      value: email,
-      errorMessage: eError,
-      handleBlur: eBlur,
-    } = useField("email", yup.string().trim().required().email());
-
-    const {
-      value: password,
-      errorMessage: pError,
-      handleBlur: pBlur,
-    } = useField("password", "email", yup.string().trim().required().min(6));
-
-  
-
-    return {
-      email,
-      eError,
-      eBlur,
-      password,
-      pError,
-      pBlur,
-    };
+    return { ...useLoginForm() };
   },
 };
 </script>
